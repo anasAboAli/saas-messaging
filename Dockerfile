@@ -5,9 +5,10 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libzip-dev \
     zip \
-    curl
+    curl \
+    libpq-dev
 
-RUN docker-php-ext-install zip
+RUN docker-php-ext-install zip pdo pdo_pgsql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -18,8 +19,6 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 RUN cp .env.example .env || true
-
-RUN php artisan key:generate || true
 
 EXPOSE 10000
 
